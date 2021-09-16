@@ -2,7 +2,7 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//yeytu7rurfui
+
 public class AnotherMenuManager : MonoBehaviourPunCallbacks
 {
     public static AnotherMenuManager Instance;//다른 class에서도 호출가능

@@ -14,6 +14,7 @@ public class AnotherPhotonScriipt : MonoBehaviourPunCallbacks
     [SerializeField] GameObject roomListItemPrefab;
     [SerializeField] Transform PlayerListContent;
     [SerializeField] GameObject PlayerListItemPrefab;
+    [SerializeField] GameObject StartGameButton;
     public static AnotherPhotonScriipt Instance; //이 스크립트를 메서드로 쓰기 위해 선언 
     private void Awake()
     {
@@ -28,6 +29,7 @@ public class AnotherPhotonScriipt : MonoBehaviourPunCallbacks
     {
         Debug.Log("Connected to Master");
         PhotonNetwork.JoinLobby(); //마스터 서버에 연결시 로비로 연결
+        PhotonNetwork.AutomaticallySyncScene = true; //자동으로 모든사람의 씬을 통일시킴
     }
     public override void OnJoinedLobby()   //로비에 연결 시 작동
     {
@@ -51,16 +53,30 @@ public class AnotherPhotonScriipt : MonoBehaviourPunCallbacks
         AnotherMenuManager.Instance.OpenMenu("room");   //룸 메뉴 열기
         roomNameText.text = PhotonNetwork.CurrentRoom.Name;   //들어간 방 이름 표시
         Player[] players = PhotonNetwork.PlayerList;
+        foreach (Transform child in PlayerListContent)
+        {
+            Destroy(child.gameObject);  //방에 들어가면 전에있던 이름표를 삭제
+        }
         for (int i = 0; i < players.Count(); i++)
         {
             Instantiate(PlayerListItemPrefab, PlayerListContent).GetComponent<PlayerListItem>().SetUp(players[i]);
             //내가 방에 들어가면 방에있는 사람 목록 만큼 이름표 뜨게 하기
         }
+        StartGameButton.SetActive(PhotonNetwork.IsMasterClient);   //방장만 게임시작 버튼 누르기 가능
     }
+    public override void OnMasterClientSwitched(Player newMasterClient)//방장이 나가서 방장이 바뀌었을때
+    {
+        StartGameButton.SetActive(PhotonNetwork.IsMasterClient);//방장만 게임시작 버튼 누르기 가능
+    }
+
     public override void OnCreateRoomFailed(short returnCode, string message) //방 생성 실패시 작동
     {
         errorText.text = "Room Creation Failed: " + message;
         AnotherMenuManager.Instance.OpenMenu("error"); //에러 메뉴 열기
+    }
+    public void StartGame()
+    {
+        PhotonNetwork.LoadLevel(1);   //1인 이유는 빌드에서 scene 번호가 1번씩이기 때문이다. 0은 초기 씬.
     }
     public void LeaveRoom()
     {
@@ -85,6 +101,10 @@ public class AnotherPhotonScriipt : MonoBehaviourPunCallbacks
         }
         for (int i = 0; i < roomList.Count; i++)//방갯수만큼 반복
         {
+            if (roomList[i].RemovedFromList)  //사라진 방은 취급 안한다.
+            {
+                continue;
+            }
             Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().SetUp(roomList[i]);
             //instantiate로 prefab을 roomListContent위치에 만들어주고 그 프리펩은 i번째 룸리스트가 된다. 
         }

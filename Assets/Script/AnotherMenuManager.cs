@@ -20,7 +20,7 @@ public class AnotherMenuManager : MonoBehaviourPunCallbacks
         {
             if (menus[i].menuName == menuName)//string을 받아서 해당이름 가진 메뉴를 여는 스크립트
             {
-                OpenMenu(menus[i]);
+                menus[i].Open();  //오픈 메뉴(스트링)에 있는 for문이 오픈메뉴(메뉴)에도 똑같이 있어서 중복을 피하고자 코드 수정
             }
             else if (menus[i].open)
             {

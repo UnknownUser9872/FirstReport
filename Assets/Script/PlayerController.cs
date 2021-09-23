@@ -7,6 +7,9 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] float mouseSensitivity, sprintSpeed, walkSpeed, jumpForce, smoothTime;
     [SerializeField] GameObject cameraHolder;
+    [SerializeField] Item[] items;
+    int itemIndex;
+    int previousItemIndex = -1;  //기본 아이템 값 없도록 설정
     //마우스감도 뛰는속도 걷는속도 점프힘 뛰기걷기바꿀때 가속시간
     float verticalLookRotation;
     bool grounded=true;//점프를 위한 바닥체크
@@ -24,8 +27,12 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        if (!PV.IsMine)
+        if (PV.IsMine)
         {
+            Equipitem(0);  //시작할때 내 포톤뷰면 1번 아이템 끼기
+        }
+        else
+        { 
             Destroy(GetComponentInChildren<Camera>().gameObject); //내꺼아니면 카메라 없애기
             Destroy(rb); //내꺼아니면 리지드바디 없애기
         }
@@ -39,8 +46,16 @@ public class PlayerController : MonoBehaviour
         Look();
         Move();
         Jump();
+        for (int i = 0; i < items.Length; i++)
+        {
+            if (Input.GetKeyDown((i + 1).ToString()))//ToString으로 하면 입력받는 String을 숫자로 표현할 수 있다. 
+            {
+                Equipitem(i);
+                //숫자키 1 2번으로 아이템 장착 가능
+                break;
+            }
+        }
     }
-
     void Look()
     {
         transform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * mouseSensitivity);
@@ -83,5 +98,19 @@ public class PlayerController : MonoBehaviour
         }
         rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);
         //이동하는거는 계산 끝난 moveAmount만큼만 고정된시간(0.2초)마다에 맞춰서
+    }
+    void Equipitem(int _index)
+    {
+        if (_index == previousItemIndex)
+        {
+            return; //입력받은 숫자가 아까 받은 숫자랑 같으면 아무일도 안일어남
+        }
+        itemIndex = _index;
+        items[itemIndex].itemGameObject.SetActive(true); //itemindex 번째 아이템on
+        if (previousItemIndex != -1) //만약 초기 값이 아니라면
+        {
+            items[previousItemIndex].itemGameObject.SetActive(false); //내가 아까 꼈던 템은 off
+        }
+        previousItemIndex = itemIndex; //무한사이클
     }
 }

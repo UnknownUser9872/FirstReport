@@ -33,4 +33,28 @@ public class PlayerGroundCheck : MonoBehaviour
         playerController.SetGroundedState(true);
         //닿고 있으면 true
     }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject == playerController.gameObject)
+            return;//해당 물체가 player면 무시
+        playerController.SetGroundedState(true);
+        //닿으면 true
+    }
+
+    void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject == playerController.gameObject)
+            return;//해당 물체가 player면 무시
+        playerController.SetGroundedState(false);
+        //떨어지면 true
+    }
+
+    void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject == playerController.gameObject)
+            return;//해당 물체가 player면 무시
+        playerController.SetGroundedState(true);
+        //닿고 있으면 true
+    }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class PlayerController : MonoBehaviour
 {
@@ -8,19 +9,33 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject cameraHolder;
     //마우스감도 뛰는속도 걷는속도 점프힘 뛰기걷기바꿀때 가속시간
     float verticalLookRotation;
-    bool grounded;//점프를 위한 바닥체크
+    bool grounded=true;//점프를 위한 바닥체크
     Vector3 smoothMoveVelocity;
     Vector3 moveAmount;//실제 이동거리
 
+    PhotonView PV;
     Rigidbody rb;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        PV = GetComponent<PhotonView>();
     }
 
+    void Start()
+    {
+        if (!PV.IsMine)
+        {
+            Destroy(GetComponentInChildren<Camera>().gameObject); //내꺼아니면 카메라 없애기
+            Destroy(rb); //내꺼아니면 리지드바디 없애기
+        }
+    }
     void Update()
     {
+        if (!PV.IsMine)
+        {
+            return;   //내꺼 아니면 작동안함
+        }
         Look();
         Move();
         Jump();
@@ -62,6 +77,10 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (!PV.IsMine)
+        {
+            return;  //내꺼아니면 작동안함
+        }
         rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);
         //이동하는거는 계산 끝난 moveAmount만큼만 고정된시간(0.2초)마다에 맞춰서
     }

@@ -304,8 +304,10 @@ MonoBehaviour:
   smoothTime: 0.1
   cameraHolder: {fileID: 3496500688488979301}
   items:
-  - {fileID: 2405262262106676577}
-  - {fileID: 2351554674486590249}
+  - {fileID: 1752476262261436163}
+  - {fileID: 5820318857446542061}
+  itemIndex: 0
+  previousItemIndex: -1
 --- !u!114 &-801520375874025155
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -438,14 +440,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1543679307262718935}
-  - component: {fileID: 2351554674486590249}
+  - component: {fileID: 5820318857446542061}
   m_Layer: 0
-  m_Name: Gun2Item
+  m_Name: Ripple
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1543679307262718935
 Transform:
   m_ObjectHideFlags: 0
@@ -461,7 +463,7 @@ Transform:
   m_Father: {fileID: 5025145483742482609}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2351554674486590249
+--- !u!114 &5820318857446542061
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -470,11 +472,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 5186292598519592684}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ce974659e0113343bf35d0a591e34c4, type: 3}
+  m_Script: {fileID: 11500000, guid: d2a647a99ab500549ad810ff9682b2d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemInfo: {fileID: 11400000, guid: d017775ff780ecd48a4237b50dd5216d, type: 2}
-  itemGameObject: {fileID: 6509670781934320620}
+  itemGameObject: {fileID: 5186292598519592684}
+  cam: {fileID: 7523096341980645211}
 --- !u!1 &6224515417891687049
 GameObject:
   m_ObjectHideFlags: 0
@@ -484,9 +487,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3587109641791794200}
-  - component: {fileID: 2405262262106676577}
+  - component: {fileID: 1752476262261436163}
   m_Layer: 0
-  m_Name: Gun1Item
+  m_Name: Pistol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -507,7 +510,7 @@ Transform:
   m_Father: {fileID: 5025145483742482609}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2405262262106676577
+--- !u!114 &1752476262261436163
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -516,11 +519,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6224515417891687049}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ce974659e0113343bf35d0a591e34c4, type: 3}
+  m_Script: {fileID: 11500000, guid: d2a647a99ab500549ad810ff9682b2d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemInfo: {fileID: 11400000, guid: 387f9b62b371514438f13ee993cfcb07, type: 2}
-  itemGameObject: {fileID: 4140236183201517948}
+  itemGameObject: {fileID: 6224515417891687049}
+  cam: {fileID: 7523096341980645211}
 --- !u!1 &6509670781934320620
 GameObject:
   m_ObjectHideFlags: 0
@@ -536,7 +540,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1742639947930785491
 Transform:
   m_ObjectHideFlags: 0

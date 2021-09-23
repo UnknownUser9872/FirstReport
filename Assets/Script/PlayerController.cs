@@ -5,7 +5,7 @@ using Photon.Pun;
 using Hashtable = ExitGames.Client.Photon.Hashtable;//현재 게임 클라이언트가 쓰는 해쉬테이블 사용
 using Photon.Realtime;
 
-public class PlayerController : MonoBehaviourPunCallbacks//다른 포톤 반응 받아들이기
+public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들이기*/,IDamageable//엔터페이스불러오기
 {
     [SerializeField] float mouseSensitivity, sprintSpeed, walkSpeed, jumpForce, smoothTime;
     [SerializeField] GameObject cameraHolder;
@@ -17,7 +17,10 @@ public class PlayerController : MonoBehaviourPunCallbacks//다른 포톤 반응 받아들
     bool grounded;//점프를 위한 바닥체크
     Vector3 smoothMoveVelocity;
     Vector3 moveAmount;//실제 이동거리
+    const float maxHealth = 100f; //풀피
+    float currentHealth = maxHealth; //지금피
 
+    PlayerManager playerManager;   //플레이어매니저 선언
     Rigidbody rb;
     PhotonView PV;
 
@@ -25,6 +28,7 @@ public class PlayerController : MonoBehaviourPunCallbacks//다른 포톤 반응 받아들
     {
         rb = GetComponent<Rigidbody>();
         PV = GetComponent<PhotonView>();
+        playerManager = PhotonView.Find((int)PV.InstantiationData[0]).GetComponent<PlayerManager>();
     }
 
     void Start()
@@ -84,6 +88,10 @@ public class PlayerController : MonoBehaviourPunCallbacks//다른 포톤 반응 받아들
         if (Input.GetMouseButtonDown(0))//마우스 좌클릭시
         {
             items[itemIndex].Use();//들고있는 아이템 사용
+        }
+        if (transform.position.y < -10f) //맵 밖으로 나가면
+        {
+            Die();
         }
     }
 
@@ -160,5 +168,32 @@ public class PlayerController : MonoBehaviourPunCallbacks//다른 포톤 반응 받아들
             return;//내꺼아니면 작동안함
         rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);
         //이동하는거는 계산 끝난 moveAmount만큼만 고정된시간(0.2초)마다에 맞춰서
+    }
+
+    public void TakeDamage(float damage)
+    {
+        //IDamageable 인터페이스에 있는 함수 재정의
+        PV.RPC("RPC_TakeDamage", RpcTarget.All, damage);
+        //피해를 입힌사람이 해당 이름을 가진 함수를 RpcTakget(지금은 모든 플레이어)에게 적용 되도록 호출
+        //Rpc를 통해 받은 피해를 모두에게 전달한다.
+    }
+    [PunRPC]
+    void RPC_TakeDamage(float damage)
+    {
+        //모두에게 전달됨
+        if (!PV.IsMine)
+        {
+            return;   //피해입은 놈 아니면 실행안됨
+        }
+        Debug.Log("took damage" + damage);
+        currentHealth -= damage;
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+    void Die()
+    {
+        playerManager.Die();
     }
 }

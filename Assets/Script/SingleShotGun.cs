@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,11 @@ using UnityEngine;
 public class SingleShotGun : Gun
 {
     [SerializeField] Camera cam;
+    PhotonView PV;
+    void Awake()
+    {
+        PV = GetComponent<PhotonView>();  
+    }
     public override void Use()
     {
         Debug.Log("using gun" + itemInfo.itemName);
@@ -18,6 +24,21 @@ public class SingleShotGun : Gun
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
             hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo)itemInfo).damage);
+            PV.RPC("RPC_Shoot" , RpcTarget.All,hit.point,hit.normal);  //맞으면 걔한테 알려주기
+        }
+    }
+    [PunRPC]
+    void RPC_Shoot(Vector3 hitPosition, Vector3 hitNormal)
+    {
+        Collider[] colliders = Physics.OverlapSphere(hitPosition, 0.3f);
+        if (colliders.Length != 0)
+        {
+            Instantiate(bulletImpactPrefab, hitPosition + hitNormal * 0.001f, Quaternion.LookRotation(hitNormal, Vector3.up) * bulletImpactPrefab.transform.rotation);
+            Destroy(bulletImpactPrefab,10f);
+            //총알자국은 10초 후에 사라진다.
+            bulletImpactPrefab.transform.SetParent(colliders[0].transform);
+            //주변에 있는 콜리더를 부모로 설정한다.
+            //부모가 사라지면 자식객체들도 다 사라지므로 총알자국만 둥둥 떠다니는걸 해결할수 있다.
         }
     }
 }

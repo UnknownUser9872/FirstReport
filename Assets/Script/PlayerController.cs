@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들
     [SerializeField] GameObject cameraHolder;
     [SerializeField] Item[] items;
     public bool isBoss;
+    Renderer capsuleColor;
     public int itemIndex;
     public int previousItemIndex = -1;//기본 아이템 값 없도록
     //마우스감도 뛰는속도 걷는속도 점프힘 뛰기걷기바꿀때 가속시간
@@ -25,7 +26,7 @@ public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들
     public static PlayerController playerController;
     public TMP_Text healthText;
     public TMP_Text bossText;
-    Renderer capsuleColor;
+    public Canvas canvas;
 
     PlayerManager playerManager;   //플레이어매니저 선언
     Rigidbody rb;
@@ -50,6 +51,7 @@ public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들
             //내꺼 아니면 카메라 없애기
             Destroy(rb);
             //내거아니면 리지드 바디 없애주기
+            canvas.gameObject.SetActive(false);
         }
         capsuleColor = gameObject.GetComponent<Renderer>();  //술래만 무기 가지게, 처음에는 아무도 무기안낌
     }
@@ -98,15 +100,13 @@ public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들
                     EquipItem(itemIndex - 1);//아니면 이전 아이템으로
                 }
             }
-            //Debug.Log(items[0].itemGameObject.activeSelf);
-            //Debug.Log(items[1].itemGameObject.activeSelf);
             if (Input.GetMouseButtonDown(0) && (items[0].itemGameObject.activeSelf == true || items[1].itemGameObject.activeSelf == true)) //마우스 좌클릭시
             {
                 if (items[0].itemGameObject.activeSelf == true)
                 {
                     TakeDamage(5);  //술래는 무기1 사용시 5까임
                 }
-                else if (items[1].itemGameObject.activeSelf == true)
+                if (items[1].itemGameObject.activeSelf == true)
                 {
                     TakeDamage(10);  //술래는 무기2 사용시 10까임
                 }
@@ -217,6 +217,7 @@ public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들
         }
         Debug.Log("took damage" + damage);
         currentHealth -= damage;
+        healthText.text = "Current Health : " + currentHealth;
         if (currentHealth <= 0)
         {
             Die();
@@ -233,6 +234,8 @@ public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들
         //술래를 정해주는 Rpc
         isBoss = _isBoss;
         Debug.Log("Boss " + isBoss);
+        items[0].itemGameObject.SetActive(true);
+        previousItemIndex = 0;
     }
     [PunRPC]
     void RPC_SetColor()   //술래 색 변경

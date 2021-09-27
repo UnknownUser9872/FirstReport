@@ -4,12 +4,15 @@ using UnityEngine;
 using Photon.Pun;
 using Hashtable = ExitGames.Client.Photon.Hashtable;//현재 게임 클라이언트가 쓰는 해쉬테이블 사용
 using Photon.Realtime;
+using static GameController;  //게임 컨트롤러 사용
+using TMPro;
 
-public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들이기*/,IDamageable//엔터페이스불러오기
+public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들이기*/, IDamageable//엔터페이스불러오기
 {
     [SerializeField] float mouseSensitivity, sprintSpeed, walkSpeed, jumpForce, smoothTime;
     [SerializeField] GameObject cameraHolder;
     [SerializeField] Item[] items;
+    public bool isBoss;
     public int itemIndex;
     public int previousItemIndex = -1;//기본 아이템 값 없도록
     //마우스감도 뛰는속도 걷는속도 점프힘 뛰기걷기바꿀때 가속시간
@@ -19,6 +22,10 @@ public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들
     Vector3 moveAmount;//실제 이동거리
     const float maxHealth = 100f; //풀피
     float currentHealth = maxHealth; //지금피
+    public static PlayerController playerController;
+    public TMP_Text healthText;
+    public TMP_Text bossText;
+    Renderer capsuleColor;
 
     PlayerManager playerManager;   //플레이어매니저 선언
     Rigidbody rb;
@@ -28,22 +35,23 @@ public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들
     {
         rb = GetComponent<Rigidbody>();
         PV = GetComponent<PhotonView>();
+        isBoss = false;  //초기 술래 끄기
         playerManager = PhotonView.Find((int)PV.InstantiationData[0]).GetComponent<PlayerManager>();
+        playerController = GetComponent<PlayerController>();  //플레이어 컨트롤러를 선언
+        GC.Players.Add(this);  //게임컨트롤러 목록에 얘네들 추가
+        Debug.Log("Add complete");  //추가완료
     }
 
     void Start()
     {
-        if (PV.IsMine)
-        {
-            EquipItem(0);//시작하고 내 포톤뷰면 1번 아이템끼기(2번 아이템은 번호상 1이다)
-        }
-        else
+        if (!PV.IsMine)
         {
             Destroy(GetComponentInChildren<Camera>().gameObject);
             //내꺼 아니면 카메라 없애기
             Destroy(rb);
             //내거아니면 리지드 바디 없애주기
         }
+        capsuleColor = gameObject.GetComponent<Renderer>();  //술래만 무기 가지게, 처음에는 아무도 무기안낌
     }
 
     void Update()
@@ -53,41 +61,62 @@ public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들
         Look();
         Move();
         Jump();
-        for (int i = 0; i < items.Length; i++)
+        if (isBoss == true)
         {
-            if (Input.GetKeyDown((i + 1).ToString()))//ToString으로 하면 입력받는 String을 숫자로 표현할 수 있다. 
-            {
-                EquipItem(i);
-                //숫자키 1 2번으로 아이템 장착 가능
-                break;
-            }
-        }
-        if (Input.GetAxisRaw("Mouse ScrollWheel") > 0f)//마우스 스크롤 움직이면
-        {
-            if (itemIndex >= items.Length - 1)//만약 아이템 목록끝에 다다르면
-            {
-                EquipItem(0);//맨처음 아이템으로
-            }
-            else
-            {
-                EquipItem(itemIndex + 1);//아니면 다음 아이템으로
-            }
-        }
-        else if (Input.GetAxisRaw("Mouse ScrollWheel") < 0f)//마우스 스크롤 반대로 움직이면
-        {
-            if (itemIndex <= 0)//아이템 목록 맨처음보다 뒤로가면?
-            {
-                EquipItem(items.Length - 1);//맨 끝 아이템으로
-            }
-            else
-            {
-                EquipItem(itemIndex - 1);//아니면 이전 아이템으로
-            }
-        }
+            healthText.text = ("Current Health : " + currentHealth.ToString());
+            bossText.text = ("Catch All");
+            PV.RPC("RPC_SetColor", RpcTarget.AllBuffered);
 
-        if (Input.GetMouseButtonDown(0))//마우스 좌클릭시
+            for (int i = 0; i < items.Length; i++)
+            {
+                if (Input.GetKeyDown((i + 1).ToString()))//ToString으로 하면 입력받는 String을 숫자로 표현할 수 있다. 
+                {
+                    EquipItem(i);
+                    //숫자키 1 2번으로 아이템 장착 가능
+                    break;
+                }
+            }
+            if (Input.GetAxisRaw("Mouse ScrollWheel") > 0f)//마우스 스크롤 움직이면
+            {
+                if (itemIndex >= items.Length - 1)//만약 아이템 목록끝에 다다르면
+                {
+                    EquipItem(0);//맨처음 아이템으로
+                }
+                else
+                {
+                    EquipItem(itemIndex + 1);//아니면 다음 아이템으로
+                }
+            }
+            else if (Input.GetAxisRaw("Mouse ScrollWheel") < 0f)//마우스 스크롤 반대로 움직이면
+            {
+                if (itemIndex <= 0)//아이템 목록 맨처음보다 뒤로가면?
+                {
+                    EquipItem(items.Length - 1);//맨 끝 아이템으로
+                }
+                else
+                {
+                    EquipItem(itemIndex - 1);//아니면 이전 아이템으로
+                }
+            }
+            //Debug.Log(items[0].itemGameObject.activeSelf);
+            //Debug.Log(items[1].itemGameObject.activeSelf);
+            if (Input.GetMouseButtonDown(0) && (items[0].itemGameObject.activeSelf == true || items[1].itemGameObject.activeSelf == true)) //마우스 좌클릭시
+            {
+                if (items[0].itemGameObject.activeSelf == true)
+                {
+                    TakeDamage(5);  //술래는 무기1 사용시 5까임
+                }
+                else if (items[1].itemGameObject.activeSelf == true)
+                {
+                    TakeDamage(10);  //술래는 무기2 사용시 10까임
+                }
+                items[itemIndex].Use();//들고있는 아이템 사용
+                Debug.Log("Shoot");
+            }
+        }
+        else
         {
-            items[itemIndex].Use();//들고있는 아이템 사용
+            bossText.text = ("Run Away");
         }
         if (transform.position.y < -10f) //맵 밖으로 나가면
         {
@@ -118,6 +147,7 @@ public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들
 
     void Jump()
     {
+        print(grounded);
         if (Input.GetKeyDown(KeyCode.Space) && grounded)//땅위에서 스페이스바 누르면
         {
             rb.AddForce(transform.up * jumpForce);//점프력만큼위로 힘받음
@@ -194,6 +224,19 @@ public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들
     }
     void Die()
     {
+        GC.Players.Remove(this);
         playerManager.Die();
+    }
+    [PunRPC]
+    void SetBoss(bool _isBoss)
+    {
+        //술래를 정해주는 Rpc
+        isBoss = _isBoss;
+        Debug.Log("Boss " + isBoss);
+    }
+    [PunRPC]
+    void RPC_SetColor()   //술래 색 변경
+    {
+        capsuleColor.material.color = Color.black;
     }
 }

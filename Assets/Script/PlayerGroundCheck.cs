@@ -12,6 +12,7 @@ public class PlayerGroundCheck : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+ 
         if (other.gameObject == playerController.gameObject)
             return;//해당 물체가 player면 무시
         playerController.SetGroundedState(true);
@@ -20,6 +21,7 @@ public class PlayerGroundCheck : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
+
         if (other.gameObject == playerController.gameObject)
             return;//해당 물체가 player면 무시
         playerController.SetGroundedState(false);
@@ -28,6 +30,7 @@ public class PlayerGroundCheck : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
+
         if (other.gameObject == playerController.gameObject)
             return;//해당 물체가 player면 무시
         playerController.SetGroundedState(true);
@@ -36,6 +39,7 @@ public class PlayerGroundCheck : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+
         if (collision.gameObject == playerController.gameObject)
             return;//해당 물체가 player면 무시
         playerController.SetGroundedState(true);
@@ -44,6 +48,7 @@ public class PlayerGroundCheck : MonoBehaviour
 
     void OnCollisionExit(Collision collision)
     {
+
         if (collision.gameObject == playerController.gameObject)
             return;//해당 물체가 player면 무시
         playerController.SetGroundedState(false);
@@ -52,6 +57,7 @@ public class PlayerGroundCheck : MonoBehaviour
 
     void OnCollisionStay(Collision collision)
     {
+
         if (collision.gameObject == playerController.gameObject)
             return;//해당 물체가 player면 무시
         playerController.SetGroundedState(true);

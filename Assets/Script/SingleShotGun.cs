@@ -33,10 +33,10 @@ public class SingleShotGun : Gun
         Collider[] colliders = Physics.OverlapSphere(hitPosition, 0.3f);
         if (colliders.Length != 0)
         {
-            Instantiate(bulletImpactPrefab, hitPosition + hitNormal * 0.001f, Quaternion.LookRotation(hitNormal, Vector3.up) * bulletImpactPrefab.transform.rotation);
-            Destroy(bulletImpactPrefab,10f);
+            GameObject BloodObj = Instantiate(bulletImpactPrefab, hitPosition + hitNormal * 0.001f, Quaternion.LookRotation(hitNormal, Vector3.up) * bulletImpactPrefab.transform.rotation);
+            Destroy(BloodObj, 10f);
             //총알자국은 10초 후에 사라진다.
-            bulletImpactPrefab.transform.SetParent(colliders[0].transform);
+            BloodObj.transform.SetParent(colliders[0].transform);
             //주변에 있는 콜리더를 부모로 설정한다.
             //부모가 사라지면 자식객체들도 다 사라지므로 총알자국만 둥둥 떠다니는걸 해결할수 있다.
         }

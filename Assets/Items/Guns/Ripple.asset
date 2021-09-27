@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Ripple
   m_EditorClassIdentifier: 
   itemName: Ripple
-  damage: 50
+  damage: 100

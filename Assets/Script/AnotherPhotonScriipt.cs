@@ -76,6 +76,7 @@ public class AnotherPhotonScriipt : MonoBehaviourPunCallbacks
     }
     public void StartGame()
     {
+        PhotonNetwork.CurrentRoom.IsVisible = false; //게임 시작하면 안보임
         PhotonNetwork.LoadLevel(1);   //1인 이유는 빌드에서 scene 번호가 1번씩이기 때문이다. 0은 초기 씬.
     }
     public void LeaveRoom()

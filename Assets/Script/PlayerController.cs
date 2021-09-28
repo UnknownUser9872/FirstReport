@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들
     public TMP_Text healthText;
     public TMP_Text bossText;
     public Canvas canvas;
+    bool isMove;
 
     PlayerManager playerManager;   //플레이어매니저 선언
     Rigidbody rb;
@@ -61,10 +62,10 @@ public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들
         if (!PV.IsMine)
             return;//내꺼아니면 작동안함
         Look();
-        Move();
         Jump();
         if (isBoss == true)
         {
+            Move();
             healthText.text = ("Current Health : " + currentHealth.ToString());
             bossText.text = ("Catch All");
             PV.RPC("RPC_SetColor", RpcTarget.AllBuffered);
@@ -117,6 +118,21 @@ public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들
         else
         {
             bossText.text = ("Run Away");
+
+            if (Input.GetMouseButton(0))
+            {
+                SetMove(false);
+                Vector3 moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
+                moveAmount = Vector3.SmoothDamp(moveAmount, moveDir * (Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed), ref smoothMoveVelocity, smoothTime);
+            }
+            else
+            {
+                SetMove(true);
+            }
+            if (Input.GetMouseButtonDown(1))
+            {
+                gameObject.transform.Rotate(new Vector3(0,90f,0));
+            }
         }
         if (transform.position.y < -10f) //맵 밖으로 나가면
         {
@@ -192,6 +208,18 @@ public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들
         grounded = _grounded;
     }
 
+    public void SetMove(bool _isMove)
+    {
+        isMove = _isMove;
+        if (_isMove == true)
+        {
+            Move();
+        }
+        else
+        {
+
+        } 
+    }
     void FixedUpdate()
     {
         if (!PV.IsMine)

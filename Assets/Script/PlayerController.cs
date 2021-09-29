@@ -28,6 +28,8 @@ public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들
     public TMP_Text bossText;
     public Canvas canvas;
     bool isMove;
+    public float speed = 10f;
+    bool turnCamera;
 
     PlayerManager playerManager;   //플레이어매니저 선언
     Rigidbody rb;
@@ -61,10 +63,11 @@ public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들
     {
         if (!PV.IsMine)
             return;//내꺼아니면 작동안함
-        Look();
         Jump();
+        Look();
         if (isBoss == true)
         {
+            turnCamera = true;
             Move();
             healthText.text = ("Current Health : " + currentHealth.ToString());
             bossText.text = ("Catch All");
@@ -118,19 +121,22 @@ public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들
         else
         {
             bossText.text = ("Run Away");
-
-            if (Input.GetMouseButton(0))
+            if (Input.GetKey(KeyCode.Q))
             {
                 SetMove(false);
-                Vector3 moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
-                moveAmount = Vector3.SmoothDamp(moveAmount, moveDir * (Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed), ref smoothMoveVelocity, smoothTime);
+                turnCamera = false;
+                gameObject.GetComponent<Rigidbody>().isKinematic = true;
             }
             else
             {
+                turnCamera = true;
                 SetMove(true);
+                gameObject.GetComponent<Rigidbody>().isKinematic = false;
             }
-            if (Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonDown(0))
             {
+                turnCamera = true;
+                Look();
                 gameObject.transform.Rotate(new Vector3(0,90f,0));
             }
         }
@@ -142,14 +148,28 @@ public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들
 
     void Look()
     {
-        transform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * mouseSensitivity);
-        //마우스 움직이는 정도*민감도만큼 각도 움직이기
-        verticalLookRotation += Input.GetAxis("Mouse Y") * mouseSensitivity;
-        //마우스 움직이는 정도*민감도만큼 각도 값 받기
-        verticalLookRotation = Mathf.Clamp(verticalLookRotation, -90f, 90f);
-        //y축 -90도에서 90도만 값으로 받음
-        cameraHolder.transform.localEulerAngles = Vector3.left * verticalLookRotation;
-        //받은 각도로 카메라도 돌려줌
+        if (turnCamera == true)
+        {
+            transform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * mouseSensitivity);
+            //마우스 움직이는 정도*민감도만큼 각도 움직이기
+            verticalLookRotation += Input.GetAxis("Mouse Y") * mouseSensitivity;
+            //마우스 움직이는 정도*민감도만큼 각도 값 받기
+            verticalLookRotation = Mathf.Clamp(verticalLookRotation, -90f, 90f);
+            //y축 -90도에서 90도만 값으로 받음
+            cameraHolder.transform.localEulerAngles = Vector3.left * verticalLookRotation;
+            //받은 각도로 카메라도 돌려줌
+        }
+        else
+        {
+            cameraHolder.transform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * mouseSensitivity);
+            //마우스 움직이는 정도*민감도만큼 각도 움직이기
+            verticalLookRotation += Input.GetAxis("Mouse Y") * mouseSensitivity;
+            //마우스 움직이는 정도*민감도만큼 각도 값 받기
+            verticalLookRotation = Mathf.Clamp(verticalLookRotation, -90f, 90f);
+            //y축 -90도에서 90도만 값으로 받음
+            cameraHolder.transform.localEulerAngles = new Vector3((Vector3.left * verticalLookRotation).x, cameraHolder.transform.localEulerAngles.y, cameraHolder.transform.localEulerAngles.z);
+            //받은 각도로 카메라도 돌려줌
+        }
     }
 
     void Move()

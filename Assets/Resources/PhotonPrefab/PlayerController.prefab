@@ -351,6 +351,7 @@ MonoBehaviour:
   healthText: {fileID: 4482185003041133644}
   bossText: {fileID: 4981944722573362412}
   canvas: {fileID: 5568029879287578955}
+  speed: 10
 --- !u!114 &-801520375874025155
 MonoBehaviour:
   m_ObjectHideFlags: 0

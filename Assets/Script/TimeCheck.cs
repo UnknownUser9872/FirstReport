@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -8,6 +9,7 @@ public class TimeCheck : MonoBehaviour
     public Canvas canvas;
     [SerializeField] TMP_Text timetext;
     public int iTimer = 600;  //시간용 카운터
+    public bool playStart = false;
 
     private void Start()
     {
@@ -15,6 +17,14 @@ public class TimeCheck : MonoBehaviour
     }
     private IEnumerator CoTimer()
     {
+        if (iTimer == 0)
+        {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                PhotonNetwork.LoadLevel(2);
+                playStart = false;
+            }
+        }
         while (true)
         {
             timetext.text = "Count Down : " + iTimer;

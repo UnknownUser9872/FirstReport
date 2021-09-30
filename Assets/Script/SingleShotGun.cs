@@ -22,7 +22,7 @@ public class SingleShotGun : Gun
     {
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f,0.5f));
         ray.origin = cam.transform.position;
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        if (Physics.Raycast(ray, out RaycastHit hit,Mathf.Infinity,LayerMask.GetMask("Player")))
         {
             hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo)itemInfo).damage);
             PV.RPC("RPC_Shoot" , RpcTarget.All,hit.point,hit.normal);  //맞으면 걔한테 알려주기

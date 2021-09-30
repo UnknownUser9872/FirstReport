@@ -109,7 +109,7 @@ public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들
             {
                 if (items[0].itemGameObject.activeSelf == true)
                 {
-                    TakeDamage(5);  //술래는 무기1 사용시 5까임
+                    TakeDamage(5);  //술래는 무기1 사용시 5까임 (플레이어 맞춰도 까이기때문에 실질적으로는 5까이고, 10을 회복함)
                 }
                 if (items[1].itemGameObject.activeSelf == true)
                 {
@@ -285,8 +285,8 @@ public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들
         Debug.Log("Boss " + isBoss);
         items[0].itemGameObject.SetActive(true);
         previousItemIndex = 0;
-        this.transform.parent = GameObject.FindWithTag("Bosscheck").transform;
-        GameObject.FindWithTag("Bosscheck").GetComponent<BossOut>().playStart = true;
+        this.transform.parent = GameObject.FindWithTag("BossCheck").transform;
+        GameObject.FindWithTag("BossCheck").GetComponent<BossOut>().playStart = true;
     }
     [PunRPC]
     void RPC_SetColor()   //술래 색 변경

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7884081257843849574}
   - component: {fileID: 7523096341980645211}
   - component: {fileID: 2327582007041344326}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 5568029879287578955}
   - component: {fileID: 4226463391370340068}
   - component: {fileID: 3142152371310317070}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -201,7 +201,7 @@ GameObject:
   - component: {fileID: 832042314290010264}
   - component: {fileID: -801520375874025155}
   - component: {fileID: 7321455572899908084}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: PlayerController
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -392,7 +392,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6947131765829466411}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: CameraHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -424,7 +424,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5025145483742482609}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ItemHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -456,7 +456,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2842409715047271576}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Gun1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -489,7 +489,7 @@ GameObject:
   - component: {fileID: 4482185003041133681}
   - component: {fileID: 4482185003041133682}
   - component: {fileID: 4482185003041133644}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: HealthText (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -623,7 +623,7 @@ GameObject:
   - component: {fileID: 4981944722573362388}
   - component: {fileID: 4981944722573362391}
   - component: {fileID: 4981944722573362412}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: BossText (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -757,7 +757,7 @@ GameObject:
   - component: {fileID: 1543679307262718935}
   - component: {fileID: 5820318857446542061}
   - component: {fileID: 498402356434324718}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ripple
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -829,7 +829,7 @@ GameObject:
   - component: {fileID: 3587109641791794200}
   - component: {fileID: 1752476262261436163}
   - component: {fileID: 6901544680113037610}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Pistol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -899,7 +899,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1742639947930785491}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Gun2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -932,7 +932,7 @@ GameObject:
   - component: {fileID: 6222782404403385240}
   - component: {fileID: 8817077211413120684}
   - component: {fileID: 5743790608313392733}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Gun1Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1013,7 +1013,7 @@ GameObject:
   - component: {fileID: 1897530308449701036}
   - component: {fileID: 8866892852596138310}
   - component: {fileID: 2673802762742227601}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Gun2Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}

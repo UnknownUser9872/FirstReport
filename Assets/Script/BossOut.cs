@@ -18,7 +18,11 @@ public class BossOut : MonoBehaviour
         {
             if (transform.childCount == 0)
             {
-                PhotonNetwork.LoadLevel(2);
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    PhotonNetwork.LoadLevel(2);
+                    playStart = false;
+                }
             }
         }
     }

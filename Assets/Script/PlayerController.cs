@@ -286,6 +286,7 @@ public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들
         items[0].itemGameObject.SetActive(true);
         previousItemIndex = 0;
         this.transform.parent = GameObject.FindWithTag("Bosscheck").transform;
+        GameObject.FindWithTag("Bosscheck").GetComponent<BossOut>().playStart = true;
     }
     [PunRPC]
     void RPC_SetColor()   //술래 색 변경

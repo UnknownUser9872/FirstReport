@@ -31,7 +31,6 @@ public class GameController : MonoBehaviour
             //술래 정하기
         }
         playerOut.playStart = true;
-        bossOut.playStart = true;
     }
     void Start()
     {

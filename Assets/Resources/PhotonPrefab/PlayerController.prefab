@@ -348,6 +348,7 @@ MonoBehaviour:
   isBoss: 0
   itemIndex: 0
   previousItemIndex: -1
+  currentHealth: 100
   healthText: {fileID: 4482185003041133644}
   bossText: {fileID: 4981944722573362412}
   canvas: {fileID: 5568029879287578955}
@@ -794,6 +795,7 @@ MonoBehaviour:
   itemGameObject: {fileID: 5186292598519592684}
   bulletImpactPrefab: {fileID: 1635944486697976910, guid: 0d20379e5ab7bea448d381f5e84cad5b, type: 3}
   cam: {fileID: 7523096341980645211}
+  playerController: {fileID: 832042314290010264}
 --- !u!114 &498402356434324718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -865,6 +867,7 @@ MonoBehaviour:
   itemGameObject: {fileID: 6224515417891687049}
   bulletImpactPrefab: {fileID: 1635944486697976910, guid: 0d20379e5ab7bea448d381f5e84cad5b, type: 3}
   cam: {fileID: 7523096341980645211}
+  playerController: {fileID: 832042314290010264}
 --- !u!114 &6901544680113037610
 MonoBehaviour:
   m_ObjectHideFlags: 0

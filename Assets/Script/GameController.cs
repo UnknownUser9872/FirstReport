@@ -6,6 +6,8 @@ using System.IO;
 
 public class GameController : MonoBehaviour
 {
+    public PlayerOut playerOut;
+    public BossOut bossOut;
     public int whichPlayerIsBoss;
     public static GameController GC;
     public List<PlayerController> Players = new List<PlayerController>();
@@ -28,6 +30,8 @@ public class GameController : MonoBehaviour
             PickBoss();
             //술래 정하기
         }
+        playerOut.playStart = true;
+        bossOut.playStart = true;
     }
     void Start()
     {
@@ -45,6 +49,5 @@ public class GameController : MonoBehaviour
         //몇번이 술래인지 말해줌
         Players[whichPlayerIsBoss].GetComponent<PhotonView>().RPC("SetBoss", RpcTarget.All, true);
         //해당 사람이 술래가됨
-
     }
 }

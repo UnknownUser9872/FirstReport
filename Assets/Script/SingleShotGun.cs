@@ -7,6 +7,7 @@ public class SingleShotGun : Gun
 {
     [SerializeField] Camera cam;
     PhotonView PV;
+    public PlayerController playerController;
     void Awake()
     {
         PV = GetComponent<PhotonView>();  
@@ -25,6 +26,7 @@ public class SingleShotGun : Gun
         {
             hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo)itemInfo).damage);
             PV.RPC("RPC_Shoot" , RpcTarget.All,hit.point,hit.normal);  //맞으면 걔한테 알려주기
+            playerController.currentHealth += 10;
         }
     }
     [PunRPC]

@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들
     Vector3 smoothMoveVelocity;
     Vector3 moveAmount;//실제 이동거리
     const float maxHealth = 100f; //풀피
-    float currentHealth = maxHealth; //지금피
+    public float currentHealth = maxHealth; //지금피
     public static PlayerController playerController;
     public TMP_Text healthText;
     public TMP_Text bossText;
@@ -48,6 +48,7 @@ public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들
 
     void Start()
     {
+        this.transform.parent = GameObject.FindWithTag("Playercheck").transform;
         if (!PV.IsMine)
         {
             Destroy(GetComponentInChildren<Camera>().gameObject);
@@ -284,6 +285,7 @@ public class PlayerController : MonoBehaviourPunCallbacks/*다른 포톤 반응 받아들
         Debug.Log("Boss " + isBoss);
         items[0].itemGameObject.SetActive(true);
         previousItemIndex = 0;
+        this.transform.parent = GameObject.FindWithTag("Bosscheck").transform;
     }
     [PunRPC]
     void RPC_SetColor()   //술래 색 변경
